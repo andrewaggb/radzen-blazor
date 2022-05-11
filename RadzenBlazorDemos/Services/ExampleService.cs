@@ -1,4 +1,5 @@
 using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -192,6 +193,14 @@ namespace RadzenBlazorDemos
                             Path = "datagrid-advanced-filter",
                             Title = "Blazor DataGrid Simple filter mode",
                             Tags = new [] { "filter", "advanced", "grid", "datagrid", "table"}
+                        },
+                        new Example
+                        {
+                            New = true,
+                            Name = "Enum filtering",
+                            Path = "datagrid-enum-filter",
+                            Title = "Blazor DataGrid enum filtering",
+                            Tags = new [] { "filter", "enum", "grid", "datagrid", "table"}
                         },
                         new Example
                         {

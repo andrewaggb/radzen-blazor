@@ -392,7 +392,7 @@ namespace Radzen.Blazor
         /// </summary>
         /// <param name="item">The item.</param>
         /// <returns>System.Object.</returns>
-        public object GetValue(TItem item)
+        public virtual object GetValue(TItem item)
         {
             var value = propertyValueGetter != null && !string.IsNullOrEmpty(Property) && !Property.Contains('.') ? propertyValueGetter(item) : !string.IsNullOrEmpty(Property) ? PropertyAccess.GetValue(item, Property) : "";
 
@@ -573,6 +573,7 @@ namespace Radzen.Blazor
             {
                 if (Grid != null)
                 {
+                    Grid.UpdatePickableColumn(this, parameters.GetValueOrDefault<bool>(nameof(Visible)));
                     await Grid.ChangeState();
                 }
             }
@@ -764,6 +765,12 @@ namespace Radzen.Blazor
 
         internal IEnumerable<FilterOperator> GetFilterOperators()
         {
+            if (PropertyAccess.IsEnum(FilterPropertyType))
+                return new FilterOperator[] { FilterOperator.Equals, FilterOperator.NotEquals };
+            
+            if (PropertyAccess.IsNullableEnum(FilterPropertyType))
+                return new FilterOperator[] { FilterOperator.Equals, FilterOperator.NotEquals, FilterOperator.IsNull, FilterOperator.IsNotNull };
+
             return Enum.GetValues(typeof(FilterOperator)).Cast<FilterOperator>().Where(o => {
                 var isStringOperator = o == FilterOperator.Contains ||  o == FilterOperator.DoesNotContain || o == FilterOperator.StartsWith || o == FilterOperator.EndsWith;
                 return FilterPropertyType == typeof(string) ? isStringOperator 
